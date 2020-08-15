@@ -13,14 +13,12 @@ def index(request):
         })
 
     form = forms.ProjetoForm(request.POST, request.FILES)
-    inline_form = inline_form = forms.LocalFormSet(request.POST, request.FILES)
-    if form.is_valid():
-        projeto = form.save(commit=False)
-        inline_form = forms.LocalFormSet(request.POST, request.FILES, instance=projeto)
-        if inline_form.is_valid():
-            projeto.save()
-            inline_form.save()
-            return shortcuts.redirect('/')
+    inline_form = forms.LocalFormSet(request.POST, request.FILES)
+    if form.is_valid() and inline_form.is_valid():
+        projeto = form.save()
+        inline_form.instance = projeto
+        inline_form.save()
+        return shortcuts.redirect('/')
 
     return shortcuts.render(request, 'projetos.html', {
         'form': form,
@@ -41,13 +39,10 @@ def editar(request, pk=None):
 
     form = forms.ProjetoForm(request.POST, request.FILES, instance=projeto)
     inline_form = forms.LocalFormSet(request.POST, request.FILES, instance=projeto)
-    if form.is_valid():
-        projeto = form.save(commit=False)
-        inline_form = forms.LocalFormSet(request.POST, request.FILES, instance=projeto)
-        if inline_form.is_valid():
-            projeto.save()
-            inline_form.save()
-            return shortcuts.redirect('/')
+    if form.is_valid() and inline_form.is_valid():
+        form.save()
+        inline_form.save()
+        return shortcuts.redirect('/')
 
     return shortcuts.render(request, 'projetos.html', {
         'form': form,

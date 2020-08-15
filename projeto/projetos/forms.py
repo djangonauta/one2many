@@ -7,7 +7,7 @@ class ProjetoForm(forms.ModelForm):
 
     class Meta:
         model = models.Projeto
-        fields = ['nome']
+        fields = ['nome', 'arquivo']
 
 class LocalForm(forms.ModelForm):
 
@@ -20,6 +20,6 @@ class LocalForm(forms.ModelForm):
 
     class Meta:
         model = models.Local
-        fields = ['nome', 'numero']
+        fields = ['nome', 'numero', 'arquivo']
 
-LocalFormSet = forms.inlineformset_factory(models.Projeto, models.Local, form=LocalForm, fields=['nome', 'numero'], extra=0)
+LocalFormSet = forms.inlineformset_factory(models.Projeto, models.Local, form=LocalForm, fields=['nome', 'numero', 'arquivo'], extra=0)

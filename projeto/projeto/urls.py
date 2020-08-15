@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import static
+from django.conf import settings
 
 from projetos import views
 
@@ -24,3 +26,5 @@ urlpatterns = [
     path('remover/<int:pk>/', views.remover),
     path('admin/', admin.site.urls),
 ]
+
+urlpatterns += static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

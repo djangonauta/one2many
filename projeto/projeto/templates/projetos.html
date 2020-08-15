@@ -5,18 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    .pointer {
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <div class="container-fluid">
     <div class="row">
       <div class="col-6">
-        <form action="" method="post" novalidate>{% csrf_token %}
+        <form action="" method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
           {{ inline_form.management_form }}
           <h4>Projeto</h4>
           <div class="form-group">
             {% render_field form.nome class="form-control form-control-sm" %}
             <small class="form-text text-danger">
               {{ form.errors.nome.0 }}
+            </small>
+          </div>
+          <div class="form-group">
+            {% render_field form.arquivo class="form-control form-control-sm" %}
+            <small class="form-text text-danger">
+              {{ form.errors.arquivo.0 }}
             </small>
           </div>
           <h4>Locais de realizacao</h4>
@@ -47,15 +58,22 @@
                     {{ iform.errors.numero.0 }}
                   </small>
                 </div>
+                <div class="form-group">
+                  {{ iform.arquivo.label_tag }}
+                  {% render_field iform.arquivo class="form-control form-control-sm" %}
+                  <small class="form-text text-danger">
+                    {{ iform.errors.arquivo.0 }}
+                  </small>
+                </div>
                 <div class="form-check">
-                  {% render_field iform.DELETE class="form-check-input" %}
-                  <label for="{{ iform.DELETE.id_for_label }}">Remover</label>
+                  {% render_field iform.DELETE class="form-check-input pointer" %}
+                  <label for="{{ iform.DELETE.id_for_label }}" class="pointer">Remover</label>
                 </div>
               </div>
             {% endfor %}
           </div>
           <button type="submit" class="btn btn-primary btn-sm">enviar</button>
-          <button id="add_form" type="button" class="btn btn-secondary">adicionar</button>
+          <button id="add_form" type="button" class="btn btn-secondary btn-sm">adicionar local</button>
         </form>
 
         <div id="empty_nav" style="display: none">
@@ -80,9 +98,16 @@
                 {{ inline_form.empty_form.errors.numero.0 }}
               </small>
             </div>
+            <div class="form-group">
+              {{ inline_form.empty_form.arquivo.label_tag }}
+              {% render_field inline_form.empty_form.arquivo class="form-control form-control-sm" %}
+              <small class="form-text text-danger">
+                {{ inline_form.empty_form.errors.arquivo.0 }}
+              </small>
+            </div>
             <div class="form-check">
-              {% render_field inline_form.empty_form.DELETE class="form-check-input" %}
-              <label for="{{ inline_form.empty_form.DELETE.id_for_label }}">Remover</label>
+              {% render_field inline_form.empty_form.DELETE class="form-check-input pointer" %}
+              <label for="{{ inline_form.empty_form.DELETE.id_for_label }}" class="pointer">Remover</label>
             </div>
           </div>
         </div>
@@ -91,6 +116,7 @@
         <table class="table table-bordered table-hover table-sm">
           <thead>
             <th>nome</th>
+            <th>Arquivo</th>
             <th>Locais</th>
             <th></th>
             <th></th>
@@ -99,7 +125,17 @@
             {% for p in projetos %}
               <tr>
                 <td>{{ p.nome }}</td>
-                <td>{{ p.locais_realizacao }}</td>
+                <td><a href="{{ p.arquivo.url }}">{{ p.arquivo.name }}</a></td>
+                <td>
+                  <ul>
+                  {% for l in p.locais.all %}
+                    <li>
+                      <p>{{ p.locais_realizacao }}</p>
+                      <a href="{{ l.arquivo.url }}">{{ l.arquivo.name }}</a>
+                    </li>
+                  {% endfor %}
+                  </ul>
+                </td>
                 <td>
                   <a href="/editar/{{ p.pk }}/">editar</a>
                 </td>
@@ -128,7 +164,3 @@
     })
   </script>
 </html>
-An internal error occurred during: "Merging with refs/heads/glpi-13139".
-Exception caught during execution of merge command. org.eclipse.jgit.errors.NoMergeBaseException: No merge base could be determined.
-Reason=CONFLICTS_DURING_MERGE_BASE_CALCULATION. Multiple common ancestors were found and merging them resulted in a
-conflict: 4c39d1900894d8d7f211717b3fbe49aa9c1dae91, 35a0132490c6a82f3ab632bb4110e1c96c444988
