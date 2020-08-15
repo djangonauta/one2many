@@ -125,13 +125,13 @@
             {% for p in projetos %}
               <tr>
                 <td>{{ p.nome }}</td>
-                <td><a href="{{ p.arquivo.url }}">{{ p.arquivo.name }}</a></td>
+                <td><a href="{{ p.arquivo.url }}" target="_blank">{{ p.arquivo.name }}</a></td>
                 <td>
                   <ul>
                   {% for l in p.locais.all %}
                     <li>
                       <p>{{ p.locais_realizacao }}</p>
-                      <a href="{{ l.arquivo.url }}">{{ l.arquivo.name }}</a>
+                      <a href="{{ l.arquivo.url }}" target="_blank">{{ l.arquivo.name }}</a>
                     </li>
                   {% endfor %}
                   </ul>

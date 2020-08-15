@@ -21,7 +21,7 @@ from django.conf import settings
 from projetos import views
 
 urlpatterns = [
-    path('', views.index),
+    path('', views.criar),
     path('editar/<int:pk>/', views.editar),
     path('remover/<int:pk>/', views.remover),
     path('admin/', admin.site.urls),

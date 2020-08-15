@@ -2,7 +2,7 @@ from django import shortcuts
 
 from . import forms, models
 
-def index(request):
+def criar(request):
     if request.method ==  'GET':
         form = forms.ProjetoForm()
         inline_form = forms.LocalFormSet()
