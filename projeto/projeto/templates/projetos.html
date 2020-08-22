@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
   <style>
     .pointer {
       cursor: pointer;
@@ -15,13 +17,27 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-6">
+        {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} mt-3">
+            {{ message }}
+          </div>
+          {% endfor %}
+        {% endif %}
         <form action="" method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
           {{ inline_form.management_form }}
-          <h4>Projeto</h4>
           <div class="form-group">
+            {{ form.nome.label_tag }}
             {% render_field form.nome class="form-control form-control-sm" %}
             <small class="form-text text-danger">
               {{ form.errors.nome.0 }}
+            </small>
+          </div>
+          <div class="form-group">
+            {{ form.tags.label_tag }}
+            {% render_field form.tags class="form-control form-control-sm" %}
+            <small class="form-text text-danger">
+              {{ form.errors.tags.0 }}
             </small>
           </div>
           <div class="form-group">
@@ -40,7 +56,7 @@
               {% endfor %}
             </div>
           </nav>
-          <div class="tab-content" id="nav-tabContent">
+          <div class="tab-content mb-3" id="nav-tabContent">
             {% for iform in inline_form.forms %}
               <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab{{ forloop.counter0 }}" role="tabpanel">
                 {% render_field iform.id %}
@@ -72,8 +88,10 @@
               </div>
             {% endfor %}
           </div>
-          <button type="submit" class="btn btn-primary btn-sm">enviar</button>
-          <button id="add_form" type="button" class="btn btn-secondary btn-sm">adicionar local</button>
+          <div class="clearfix">
+            <button id="add_form" type="button" class="btn btn-secondary btn-sm float-let">adicionar local</button>
+            <button type="submit" class="btn btn-primary btn-sm float-right">enviar</button>
+          </div>
         </form>
 
         <div id="empty_nav" style="display: none">
@@ -115,11 +133,13 @@
         <hr/>
         <table class="table table-bordered table-hover table-sm">
           <thead>
-            <th>nome</th>
-            <th>Arquivo</th>
-            <th>Locais</th>
-            <th></th>
-            <th></th>
+            <tr>
+              <th>nome</th>
+              <th>Arquivo</th>
+              <th>Locais</th>
+              <th></th>
+              <th></th>
+            </tr>
           </thead>
           <tbody>
             {% for p in projetos %}
@@ -153,6 +173,8 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+  
   <script>
     $(function () {
       $('#add_form').click(function() {
@@ -162,5 +184,8 @@
         $('#id_locais-TOTAL_FORMS').val(parseInt(form_idx) + 1);
       });
     })
+
+    $('select').select2();
   </script>
+</body>
 </html>

@@ -7,7 +7,7 @@ class ProjetoForm(forms.ModelForm):
 
     class Meta:
         model = models.Projeto
-        fields = ['nome', 'arquivo']
+        fields = ['nome', 'arquivo', 'tags']
 
 class LocalForm(forms.ModelForm):
 
