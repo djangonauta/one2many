@@ -47,61 +47,74 @@
             </small>
           </div>
           <h4>Locais de realizacao</h4>
-          <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+                {% for iform in inline_form.forms %}
+                <li class="nav-item">
+                  <a class="nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ forloop.counter0 }}" data-toggle="tab" href="#tab-{{ forloop.counter0 }}" role="tab">
+                    {{ forloop.counter0|add:"1" }}
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="card-body tab-content" id="nav-tabContent">
               {% for iform in inline_form.forms %}
-                <a class="nav-item nav-link {% if forloop.first %}active{% endif %}" id="nav{{ forloop.counter0 }}" data-toggle="tab" href="#tab{{ forloop.counter0 }}" role="tab">
-                  {{ forloop.counter0|add:"1" }}
-                </a>
+                <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}" role="tabpanel">
+                  {% render_field iform.id %}
+                  <div class="form-group">
+                    {{ iform.nome.label_tag }}
+                    {% render_field iform.nome class="form-control form-control-sm" %}
+                    <small class="form-text text-danger">
+                      {{ iform.errors.nome.0 }}
+                    </small>
+                  </div>
+                  <div class="form-group">
+                    {{ iform.numero.label_tag }}
+                    {% render_field iform.numero class="form-control form-control-sm" %}
+                    <small class="form-text text-danger">
+                      {{ iform.errors.numero.0 }}
+                    </small>
+                  </div>
+                  <div class="form-group">
+                    {{ iform.arquivo.label_tag }}
+                    {% render_field iform.arquivo class="form-control form-control-sm" %}
+                    <small class="form-text text-danger">
+                      {{ iform.errors.arquivo.0 }}
+                    </small>
+                  </div>
+                  <div class="form-check">
+                    {% render_field iform.DELETE class="form-check-input pointer" %}
+                    <label for="{{ iform.DELETE.id_for_label }}" class="pointer">Remover</label>
+                  </div>
+                </div>
+              {% empty %}
+                <p id="tab-message">Clique no botão abaixo <code>Adicionar Local</code> para adicionar novos locais de realização.</p>
               {% endfor %}
             </div>
-          </nav>
-          <div class="tab-content mb-3" id="nav-tabContent">
-            {% for iform in inline_form.forms %}
-              <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab{{ forloop.counter0 }}" role="tabpanel">
-                {% render_field iform.id %}
-                <div class="form-group">
-                  {{ iform.nome.label_tag }}
-                  {% render_field iform.nome class="form-control form-control-sm" %}
-                  <small class="form-text text-danger">
-                    {{ iform.errors.nome.0 }}
-                  </small>
-                </div>
-                <div class="form-group">
-                  {{ iform.numero.label_tag }}
-                  {% render_field iform.numero class="form-control form-control-sm" %}
-                  <small class="form-text text-danger">
-                    {{ iform.errors.numero.0 }}
-                  </small>
-                </div>
-                <div class="form-group">
-                  {{ iform.arquivo.label_tag }}
-                  {% render_field iform.arquivo class="form-control form-control-sm" %}
-                  <small class="form-text text-danger">
-                    {{ iform.errors.arquivo.0 }}
-                  </small>
-                </div>
-                <div class="form-check">
-                  {% render_field iform.DELETE class="form-check-input pointer" %}
-                  <label for="{{ iform.DELETE.id_for_label }}" class="pointer">Remover</label>
-                </div>
-              </div>
-            {% endfor %}
           </div>
-          <div class="clearfix">
-            <button id="add_form" type="button" class="btn btn-secondary btn-sm float-let">adicionar local</button>
-            <button type="submit" class="btn btn-primary btn-sm float-right">enviar</button>
+          
+          <div class="clearfix mt-3">
+            <button id="add_form" type="button" class="btn btn-secondary btn-sm float-let">Adicionar Local</button>
+            <a href="/" class="btn btn-success btn-sm">Novo projeto</a>
+            <button type="submit" class="btn btn-primary btn-sm float-right">
+              {% if atualizar %}Atualizar{% else %}Cadastrar{% endif %}
+            </button>
           </div>
         </form>
 
         <div id="empty_nav" style="display: none">
-          <a class="nav-item nav-link" id="nav__prefix__" data-toggle="tab" href="#tab__prefix__" role="tab">
-            __counter__
-          </a>
+          <li class="nav-item">
+            <a class="nav-link" id="nav-__prefix__" data-toggle="tab" href="#tab-__prefix__" role="tab">
+              __counter__
+            </a>
+          </li>
         </div>
     
         <div id="empty_tab_form" style="display:none">
-          <div class="tab-pane fade" id="tab__prefix__">
+          <div class="tab-pane fade" id="tab-__prefix__">
             <div class="form-group">
               {{ inline_form.empty_form.nome.label_tag }}
               {% render_field inline_form.empty_form.nome class="form-control form-control-sm" %}
@@ -132,7 +145,8 @@
 
         <hr/>
         <table class="table table-bordered table-hover table-sm">
-          <thead>
+          <caption>Lista de Projetos Cadastrados</caption>
+          <thead class="thead-light">
             <tr>
               <th>nome</th>
               <th>Arquivo</th>
@@ -145,12 +159,16 @@
             {% for p in projetos %}
               <tr>
                 <td>{{ p.nome }}</td>
-                <td><a href="{{ p.arquivo.url }}" target="_blank">{{ p.arquivo.name }}</a></td>
+                <td>
+                  <a href="{{ p.arquivo.url }}" target="_blank">
+                    <img src="{{ p.arquivo.url }}" alt=""class="img-thumbnail" width="128" height="128">
+                  </a>
+                </td>
                 <td>
                   <ul>
                   {% for l in p.locais.all %}
                     <li>
-                      <p>{{ p.locais_realizacao }}</p>
+                      <p>{{ l.nome }}</p>
                       <a href="{{ l.arquivo.url }}" target="_blank">{{ l.arquivo.name }}</a>
                     </li>
                   {% endfor %}
@@ -177,11 +195,26 @@
   
   <script>
     $(function () {
-      $('#add_form').click(function() {
-        var form_idx = $('#id_locais-TOTAL_FORMS').val();
+      function esconderMensagemTab() {
+        if ($('#nav-tab').children().length > 0) {
+          $('#tab-message').hide();
+        }
+      }
+
+      function adicionarTab(form_idx) {
         $('#nav-tab').append($('#empty_nav').html().replace(/__prefix__/g, form_idx).replace(/__counter__/g, parseInt(form_idx) + 1));
         $('#nav-tabContent').append($('#empty_tab_form').html().replace(/__prefix__/g, form_idx));
+        $('#nav-' + form_idx).tab('show');
+        esconderMensagemTab();
+      }
+
+      esconderMensagemTab();
+
+      $('#add_form').click(function() {
+        var form_idx = $('#id_locais-TOTAL_FORMS').val();
         $('#id_locais-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+
+        adicionarTab(form_idx);
       });
     })
 
