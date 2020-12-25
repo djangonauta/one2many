@@ -21,6 +21,7 @@ class Tag(models.Model):
 def caminho_projeto(instance, filename):
     return f'projetos/{instance.nome}/{filename}'
 
+
 class Projeto(models.Model):
 
     nome = models.CharField(max_length=255)
@@ -33,6 +34,7 @@ class Projeto(models.Model):
 
 def caminho_local(instance, filename):
     return f'projetos/{instance.projeto.nome}/{instance.id}/{filename}'
+
 
 class Local(models.Model):
 
