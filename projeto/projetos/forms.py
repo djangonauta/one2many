@@ -3,13 +3,19 @@ from django.core import exceptions
 
 from . import models
 
+
 class ProjetoForm(forms.ModelForm):
 
     class Meta:
         model = models.Projeto
         fields = ['nome', 'arquivo', 'tags']
 
+
 class LocalForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Local
+        fields = ['nome', 'numero', 'arquivo']
 
     def clean_numero(self):
         numero = self.cleaned_data['numero']
@@ -18,8 +24,11 @@ class LocalForm(forms.ModelForm):
 
         return numero
 
-    class Meta:
-        model = models.Local
-        fields = ['nome', 'numero', 'arquivo']
 
-LocalFormSet = forms.inlineformset_factory(models.Projeto, models.Local, form=LocalForm, fields=['nome', 'numero', 'arquivo'], extra=0)
+LocalFormSet = forms.inlineformset_factory(
+    models.Projeto,
+    models.Local,
+    form=LocalForm,
+    fields=['nome', 'numero', 'arquivo'],
+    extra=0
+)

@@ -1,11 +1,11 @@
 from django import shortcuts
-from django.views import generic
 from django.contrib import messages
 
 from . import forms, models
 
+
 def criar(request):
-    if request.method ==  'GET':
+    if request.method == 'GET':
         form = forms.ProjetoForm()
         inline_form = forms.LocalFormSet()
         return shortcuts.render(request, 'projetos.html', {
@@ -31,9 +31,10 @@ def criar(request):
         'atualizar': False,
     })
 
+
 def editar(request, pk=None):
     projeto = shortcuts.get_object_or_404(models.Projeto, pk=pk)
-    if request.method ==  'GET':
+    if request.method == 'GET':
         form = forms.ProjetoForm(instance=projeto)
         inline_form = forms.LocalFormSet(instance=projeto)
         return shortcuts.render(request, 'projetos.html', {
@@ -58,26 +59,14 @@ def editar(request, pk=None):
         'atualizar': True,
     })
 
+
 def remover(request, pk=None):
     projeto = shortcuts.get_object_or_404(models.Projeto, pk=pk)
     if request.method == 'GET':
-        return shortcuts.render(request, '', {
+        return shortcuts.render(request, 'remover_projeto.html', {
             'projeto': projeto
         })
 
     projeto.delete()
+    messages.warning(request, 'Projeto removido com sucesso')
     return shortcuts.redirect('/')
-
-
-class RemoverProjetoView(generic.DeleteView):
-
-    template_name = 'remover_projeto.html'
-    model = models.Projeto
-    success_url = '/'
-    
-    def delete(self, request, *args, **kwargs):
-        messages.warning(request, 'Projeto removido com sucesso')
-        return super().delete(request, *args, **kwargs)
-
-
-remover = RemoverProjetoView.as_view()
