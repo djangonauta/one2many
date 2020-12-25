@@ -10,6 +10,9 @@ class ProjetoForm(forms.ModelForm):
         model = models.Projeto
         fields = ['nome', 'arquivo', 'tags']
 
+    def atualizar(self):
+        return self.instance.pk is not None
+
 
 class LocalForm(forms.ModelForm):
 

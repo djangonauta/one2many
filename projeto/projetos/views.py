@@ -12,7 +12,6 @@ def criar(request):
             'form': form,
             'inline_form': inline_form,
             'projetos': models.Projeto.objects.all(),
-            'atualizar': False,
         })
 
     form = forms.ProjetoForm(request.POST, request.FILES)
@@ -28,7 +27,6 @@ def criar(request):
         'form': form,
         'inline_form': inline_form,
         'projetos': models.Projeto.objects.all(),
-        'atualizar': False,
     })
 
 
@@ -41,7 +39,6 @@ def editar(request, pk=None):
             'form': form,
             'inline_form': inline_form,
             'projetos': models.Projeto.objects.all(),
-            'atualizar': True,
         })
 
     form = forms.ProjetoForm(request.POST, request.FILES, instance=projeto)
@@ -56,7 +53,6 @@ def editar(request, pk=None):
         'form': form,
         'inline_form': inline_form,
         'projetos': models.Projeto.objects.all(),
-        'atualizar': True,
     })
 
 
