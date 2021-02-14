@@ -192,7 +192,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-  
+
   <script>
     $(function () {
       function esconderMensagemTab() {
@@ -202,16 +202,37 @@
       }
 
       function adicionarTab(form_idx) {
-        $('#nav-tab').append($('#empty_nav').html().replace(/__prefix__/g, form_idx).replace(/__counter__/g, parseInt(form_idx) + 1));
-        $('#nav-tabContent').append($('#empty_tab_form').html().replace(/__prefix__/g, form_idx));
+        // obtém o template oculto da tab na página para substituição
+        var template_nav = $('#empty_nav').html();
+
+        // cria a tab setando o novo índice de formulário (total) no template
+        var tab_indexada = template_nav.replace(/__prefix__/g, form_idx).replace(/__counter__/g, parseInt(form_idx) + 1);
+
+        // adiciona a tab ao conjunto de tabs
+        $('#nav-tab').append(tab_indexada);
+
+        // obtém o template oculto do formulário na página para substituição
+        var template_form = $('#empty_tab_form').html();
+
+        // cria o formulário setando o índice de formulário (total) no template
+        var form_indexado = template_form.replace(/__prefix__/g, form_idx);
+
+        // adiciona o formulário ao conjunto de formulários
+        $('#nav-tabContent').append(form_indexado);
+
+        // exibe (ativa) a tab atual
         $('#nav-' + form_idx).tab('show');
+
         esconderMensagemTab();
       }
 
       esconderMensagemTab();
 
       $('#add_form').click(function() {
+        // obtém o total de formulários adicionado por inline_form.management_form
         var form_idx = $('#id_locais-TOTAL_FORMS').val();
+
+        // incrementa e atualiza o total de formulários
         $('#id_locais-TOTAL_FORMS').val(parseInt(form_idx) + 1);
 
         adicionarTab(form_idx);
