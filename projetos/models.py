@@ -46,3 +46,12 @@ class Local(models.Model):
 
     def __str__(self):
         return f'{self.nome}({self.numero})'
+
+
+class Apelido(models.Model):
+
+    projeto = models.ForeignKey(Projeto, related_name='apelidos', on_delete=models.CASCADE)
+    nome = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nome

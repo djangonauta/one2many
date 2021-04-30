@@ -28,10 +28,26 @@ class LocalForm(forms.ModelForm):
         return numero
 
 
+class ApelidoForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Apelido
+        fields = ['nome']
+
+
 LocalFormSet = forms.inlineformset_factory(
     models.Projeto,
     models.Local,
     form=LocalForm,
     fields=['nome', 'numero', 'arquivo'],
-    extra=1,
+    extra=0,
+)
+
+
+ApelidoFormSet = forms.inlineformset_factory(
+    models.Projeto,
+    models.Apelido,
+    form=ApelidoForm,
+    fields=ApelidoForm.Meta.fields,
+    extra=0,
 )

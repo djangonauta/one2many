@@ -25,35 +25,39 @@
           </div>
           {% endfor %}
         {% endif %}
+
         <form action="" method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
           {{ locais_inline_form.management_form }}
-          <div class="form-group">
+          {{ apelidos_inline_form.management_form }}
+          <div class="form-group mt-3">
             {{ form.nome.label_tag }}
             {% render_field projeto_form.nome class="form-control form-control-sm" %}
             <small class="form-text text-danger">
-              {{ form.errors.nome.0 }}
+              {{ projeto_form.errors.nome.0 }}
             </small>
           </div>
           <div class="form-group">
             {{ form.tags.label_tag }}
             {% render_field projeto_form.tags class="form-control form-control-sm" %}
             <small class="form-text text-danger">
-              {{ form.errors.tags.0 }}
+              {{ projeto_form.errors.tags.0 }}
             </small>
           </div>
           <div class="form-group">
             {% render_field projeto_form.arquivo class="form-control form-control-sm" %}
             <small class="form-text text-danger">
-              {{ form.errors.arquivo.0 }}
+              {{ projeto_form.errors.arquivo.0 }}
             </small>
           </div>
+
           <h4>Locais de realizacao</h4>
           <div class="card">
             <div class="card-header">
-              <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+              <ul class="nav nav-tabs card-header-tabs" id="nav-tab-local" role="tablist">
                 {% for iform in locais_inline_form.forms %}
                 <li class="nav-item">
-                  <a class="nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ forloop.counter0 }}" data-toggle="tab" href="#tab-{{ forloop.counter0 }}" role="tab">
+                  <a class="nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ forloop.counter0 }}-local"
+                      data-toggle="tab" href="#tab-{{ forloop.counter0 }}-local" role="tab">
                     {{ forloop.counter0|add:"1" }}
                     {% if iform.errors %}
                       <i class="fa fa-times-circle text-danger"></i>
@@ -67,9 +71,9 @@
               </ul>
             </div>
 
-            <div class="card-body tab-content" id="nav-tabContent">
+            <div class="card-body tab-content" id="nav-tabContent-local">
               {% for iform in locais_inline_form.forms %}
-                <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}" role="tabpanel">
+                <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}-local" role="tabpanel">
                   {% render_field iform.id %}
                   <div class="form-group">
                     {{ iform.nome.label_tag }}
@@ -98,33 +102,81 @@
                   </div>
                 </div>
               {% empty %}
-                <p id="tab-message">Clique no botão abaixo <code>Adicionar Local</code> para adicionar novos locais de realização.</p>
+                <p id="tab-message-local">Clique no botão abaixo <code>Adicionar Local</code> para adicionar novos locais de realização.</p>
               {% endfor %}
             </div>
           </div>
           
           <div class="mt-3">
-            <button id="add_form" type="button" class="btn btn-secondary btn-sm">Adicionar Local</button>
-            <a href="/" class="btn btn-success btn-sm">Novo projeto</a>
+            <button id="add_form_local" type="button" class="btn btn-secondary btn-sm">Adicionar Local</button>
+          </div>
+          <hr>
+
+          <h4>Apelidos</h4>
+          <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs" id="nav-tab-apelido" role="tablist">
+                {% for iform in apelidos_inline_form.forms %}
+                <li class="nav-item">
+                  <a class="nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ forloop.counter0 }}-apelido"
+                      data-toggle="tab" href="#tab-{{ forloop.counter0 }}-apelido" role="tab">
+                    {{ forloop.counter0|add:"1" }}
+                    {% if iform.errors %}
+                      <i class="fa fa-times-circle text-danger"></i>
+                    {% endif %}
+                    {% if not iform.errors and iform.has_changed %}
+                      <i class="fa fa-check-circle text-success"></i>
+                    {% endif %}
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="card-body tab-content" id="nav-tabContent-apelido">
+              {% for iform in apelidos_inline_form.forms %}
+                <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}-apelido" role="tabpanel">
+                  {% render_field iform.id %}
+                  <div class="form-group">
+                    {{ iform.nome.label_tag }}
+                    {% render_field iform.nome class="form-control form-control-sm" %}
+                    <small class="form-text text-danger">
+                      {{ iform.errors.nome.0 }}
+                    </small>
+                  </div>
+                  <div class="form-check">
+                    {% render_field iform.DELETE class="form-check-input pointer" %}
+                    <label for="{{ iform.DELETE.id_for_label }}" class="pointer">Remover</label>
+                  </div>
+                </div>
+              {% empty %}
+                <p id="tab-message-apelido">Clique no botão abaixo <code>Adicionar Apelido</code> para adicionar novos apelido.</p>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <button id="add_form_apelido" type="button" class="btn btn-secondary btn-sm">Adicionar Apelido</button>
           </div>
           <hr>
           <div class="mt-3">
             <button type="submit" class="btn btn-primary btn-sm">
               {% if form.atualizar %}Atualizar{% else %}Cadastrar{% endif %}
             </button>
+            <a href="/" class="btn btn-success btn-sm">Novo projeto</a>
           </div>
         </form>
 
-        <div id="empty_nav" style="display: none">
+        <div id="empty_nav_local" style="display: none">
           <li class="nav-item">
-            <a class="nav-link" id="nav-__prefix__" data-toggle="tab" href="#tab-__prefix__" role="tab">
+            <a class="nav-link" id="nav-__prefix__-local" data-toggle="tab" href="#tab-__prefix__-local" role="tab">
               __counter__
             </a>
           </li>
         </div>
     
-        <div id="empty_tab_form" style="display:none">
-          <div class="tab-pane fade" id="tab-__prefix__">
+        <div id="empty_tab_form_local" style="display:none">
+          <div class="tab-pane fade" id="tab-__prefix__-local">
             <div class="form-group">
               {{ locais_inline_form.empty_form.nome.label_tag }}
               {% render_field locais_inline_form.empty_form.nome class="form-control form-control-sm" %}
@@ -149,6 +201,30 @@
             <div class="form-check">
               {% render_field locais_inline_form.empty_form.DELETE class="form-check-input pointer" %}
               <label for="{{ locais_inline_form.empty_form.DELETE.id_for_label }}" class="pointer">Remover</label>
+            </div>
+          </div>
+        </div>
+
+        <div id="empty_nav_apelido" style="display: none">
+          <li class="nav-item">
+            <a class="nav-link" id="nav-__prefix__-apelido" data-toggle="tab" href="#tab-__prefix__-apelido" role="tab">
+              __counter__
+            </a>
+          </li>
+        </div>
+
+        <div id="empty_tab_form_apelido" style="display:none">
+          <div class="tab-pane fade" id="tab-__prefix__-apelido">
+            <div class="form-group">
+              {{ apelidos_inline_form.empty_form.nome.label_tag }}
+              {% render_field apelidos_inline_form.empty_form.nome class="form-control form-control-sm" %}
+              <small class="form-text text-danger">
+                {{ apelidos_inline_form.empty_form.errors.nome.0 }}
+              </small>
+            </div>
+            <div class="form-check">
+              {% render_field apelidos_inline_form.empty_form.DELETE class="form-check-input pointer" %}
+              <label for="{{ apelidos_inline_form.empty_form.DELETE.id_for_label }}" class="pointer">Remover</label>
             </div>
           </div>
         </div>
@@ -185,6 +261,15 @@
                   </ul>
                 </td>
                 <td>
+                  <ul>
+                  {% for a in p.apelidos.all %}
+                    <li>
+                      <p>{{ a.nome }}</p>
+                    </li>
+                  {% endfor %}
+                  </ul>
+                </td>
+                <td>
                   <a href="/editar/{{ p.pk }}/">editar</a>
                 </td>
                 <td>
@@ -205,40 +290,46 @@
 
   <script>
     $(function () {
-      function esconderMensagemTab() {
-        if ($('#nav-tab').children().length > 0) {
-          $('#tab-message').hide();
+      function esconderMensagemTabLocal() {
+        if ($('#nav-tab-local').children().length > 0) {
+          $('#tab-message-local').hide();
         }
       }
 
-      function adicionarTab(form_idx) {
+      function esconderMensagemTabApelido() {
+        if ($('#nav-tab-apelido').children().length > 0) {
+          $('#tab-message-apelido').hide();
+        }
+      }
+
+      function adicionarTabLocal(form_idx) {
         // obtém o template oculto da tab na página para substituição
-        var template_nav = $('#empty_nav').html();
+        var template_nav = $('#empty_nav_local').html();
 
         // cria a tab setando o novo índice de formulário (total) no template
         var tab_indexada = template_nav.replace(/__prefix__/g, form_idx).replace(/__counter__/g, parseInt(form_idx) + 1);
 
         // adiciona a tab ao conjunto de tabs
-        $('#nav-tab').append(tab_indexada);
+        $('#nav-tab-local').append(tab_indexada);
 
         // obtém o template oculto do formulário na página para substituição
-        var template_form = $('#empty_tab_form').html();
+        var template_form = $('#empty_tab_form_local').html();
 
         // cria o formulário setando o índice de formulário (total) no template
         var form_indexado = template_form.replace(/__prefix__/g, form_idx);
 
         // adiciona o formulário ao conjunto de formulários
-        $('#nav-tabContent').append(form_indexado);
+        $('#nav-tabContent-local').append(form_indexado);
 
         // exibe (ativa) a tab atual
-        $('#nav-' + form_idx).tab('show');
+        $('#nav-' + form_idx + '-local').tab('show');
 
-        esconderMensagemTab();
+        esconderMensagemTabLocal();
       }
 
-      esconderMensagemTab();
+      esconderMensagemTabLocal();
 
-      $('#add_form').click(function() {
+      $('#add_form_local').click(function() {
         // obtém o total de formulários adicionado por locais_inline_form.management_form
         // locais == related_name
         var form_idx = $('#id_locais-TOTAL_FORMS').val();
@@ -246,7 +337,46 @@
         // incrementa e atualiza o total de formulários
         $('#id_locais-TOTAL_FORMS').val(parseInt(form_idx) + 1);
 
-        adicionarTab(form_idx);
+        adicionarTabLocal(form_idx);
+      });
+
+
+      function adicionarTabApelido(form_idx) {
+        // obtém o template oculto da tab na página para substituição
+        var template_nav = $('#empty_nav_apelido').html();
+
+        // cria a tab setando o novo índice de formulário (total) no template
+        var tab_indexada = template_nav.replace(/__prefix__/g, form_idx).replace(/__counter__/g, parseInt(form_idx) + 1);
+
+        // adiciona a tab ao conjunto de tabs
+        $('#nav-tab-apelido').append(tab_indexada);
+
+        // obtém o template oculto do formulário na página para substituição
+        var template_form = $('#empty_tab_form_apelido').html();
+
+        // cria o formulário setando o índice de formulário (total) no template
+        var form_indexado = template_form.replace(/__prefix__/g, form_idx);
+
+        // adiciona o formulário ao conjunto de formulários
+        $('#nav-tabContent-apelido').append(form_indexado);
+
+        // exibe (ativa) a tab atual
+        $('#nav-' + form_idx + '-apelido').tab('show');
+
+        esconderMensagemTabApelido();
+      }
+
+      esconderMensagemTabApelido();
+
+      $('#add_form_apelido').click(function() {
+        // obtém o total de formulários adicionado por locais_inline_form.management_form
+        // locais == related_name
+        var form_idx = $('#id_apelidos-TOTAL_FORMS').val();
+
+        // incrementa e atualiza o total de formulários
+        $('#id_apelidos-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+
+        adicionarTabApelido(form_idx);
       });
     })
 
