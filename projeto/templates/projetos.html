@@ -26,23 +26,23 @@
           {% endfor %}
         {% endif %}
         <form action="" method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
-          {{ inline_form.management_form }}
+          {{ locais_inline_form.management_form }}
           <div class="form-group">
             {{ form.nome.label_tag }}
-            {% render_field form.nome class="form-control form-control-sm" %}
+            {% render_field projeto_form.nome class="form-control form-control-sm" %}
             <small class="form-text text-danger">
               {{ form.errors.nome.0 }}
             </small>
           </div>
           <div class="form-group">
             {{ form.tags.label_tag }}
-            {% render_field form.tags class="form-control form-control-sm" %}
+            {% render_field projeto_form.tags class="form-control form-control-sm" %}
             <small class="form-text text-danger">
               {{ form.errors.tags.0 }}
             </small>
           </div>
           <div class="form-group">
-            {% render_field form.arquivo class="form-control form-control-sm" %}
+            {% render_field projeto_form.arquivo class="form-control form-control-sm" %}
             <small class="form-text text-danger">
               {{ form.errors.arquivo.0 }}
             </small>
@@ -51,7 +51,7 @@
           <div class="card">
             <div class="card-header">
               <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
-                {% for iform in inline_form.forms %}
+                {% for iform in locais_inline_form.forms %}
                 <li class="nav-item">
                   <a class="nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ forloop.counter0 }}" data-toggle="tab" href="#tab-{{ forloop.counter0 }}" role="tab">
                     {{ forloop.counter0|add:"1" }}
@@ -68,7 +68,7 @@
             </div>
 
             <div class="card-body tab-content" id="nav-tabContent">
-              {% for iform in inline_form.forms %}
+              {% for iform in locais_inline_form.forms %}
                 <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}" role="tabpanel">
                   {% render_field iform.id %}
                   <div class="form-group">
@@ -103,10 +103,13 @@
             </div>
           </div>
           
-          <div class="clearfix mt-3">
-            <button id="add_form" type="button" class="btn btn-secondary btn-sm float-let">Adicionar Local</button>
+          <div class="mt-3">
+            <button id="add_form" type="button" class="btn btn-secondary btn-sm">Adicionar Local</button>
             <a href="/" class="btn btn-success btn-sm">Novo projeto</a>
-            <button type="submit" class="btn btn-primary btn-sm float-right">
+          </div>
+          <hr>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-primary btn-sm">
               {% if form.atualizar %}Atualizar{% else %}Cadastrar{% endif %}
             </button>
           </div>
@@ -123,29 +126,29 @@
         <div id="empty_tab_form" style="display:none">
           <div class="tab-pane fade" id="tab-__prefix__">
             <div class="form-group">
-              {{ inline_form.empty_form.nome.label_tag }}
-              {% render_field inline_form.empty_form.nome class="form-control form-control-sm" %}
+              {{ locais_inline_form.empty_form.nome.label_tag }}
+              {% render_field locais_inline_form.empty_form.nome class="form-control form-control-sm" %}
               <small class="form-text text-danger">
-                {{ inline_form.empty_form.errors.nome.0 }}
+                {{ locais_inline_form.empty_form.errors.nome.0 }}
               </small>
             </div>
             <div class="form-group">
-              {{ inline_form.empty_form.numero.label_tag }}
-              {% render_field inline_form.empty_form.numero class="form-control form-control-sm" %}
+              {{ locais_inline_form.empty_form.numero.label_tag }}
+              {% render_field locais_inline_form.empty_form.numero class="form-control form-control-sm" %}
               <small class="form-text text-danger">
-                {{ inline_form.empty_form.errors.numero.0 }}
+                {{ locais_inline_form.empty_form.errors.numero.0 }}
               </small>
             </div>
             <div class="form-group">
-              {{ inline_form.empty_form.arquivo.label_tag }}
-              {% render_field inline_form.empty_form.arquivo class="form-control form-control-sm" %}
+              {{ locais_inline_form.empty_form.arquivo.label_tag }}
+              {% render_field locais_inline_form.empty_form.arquivo class="form-control form-control-sm" %}
               <small class="form-text text-danger">
-                {{ inline_form.empty_form.errors.arquivo.0 }}
+                {{ locais_inline_form.empty_form.errors.arquivo.0 }}
               </small>
             </div>
             <div class="form-check">
-              {% render_field inline_form.empty_form.DELETE class="form-check-input pointer" %}
-              <label for="{{ inline_form.empty_form.DELETE.id_for_label }}" class="pointer">Remover</label>
+              {% render_field locais_inline_form.empty_form.DELETE class="form-check-input pointer" %}
+              <label for="{{ locais_inline_form.empty_form.DELETE.id_for_label }}" class="pointer">Remover</label>
             </div>
           </div>
         </div>
@@ -236,7 +239,8 @@
       esconderMensagemTab();
 
       $('#add_form').click(function() {
-        // obtém o total de formulários adicionado por inline_form.management_form
+        // obtém o total de formulários adicionado por locais_inline_form.management_form
+        // locais == related_name
         var form_idx = $('#id_locais-TOTAL_FORMS').val();
 
         // incrementa e atualiza o total de formulários

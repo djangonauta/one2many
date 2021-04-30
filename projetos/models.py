@@ -8,6 +8,7 @@ class TagChoices(models.IntegerChoices):
     APROVADO = 3, 'Aprovado'
     REPROVADO = 4, 'Reprovado'
     REMOVIDO = 5, 'Removido'
+    NOVO_STATUS = 6, 'Novo Status'
 
 
 class Tag(models.Model):

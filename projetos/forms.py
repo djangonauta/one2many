@@ -33,6 +33,5 @@ LocalFormSet = forms.inlineformset_factory(
     models.Local,
     form=LocalForm,
     fields=['nome', 'numero', 'arquivo'],
-    min_num=2,
-    extra=0,
+    extra=1,
 )

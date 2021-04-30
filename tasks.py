@@ -5,4 +5,4 @@ import invoke
 
 @invoke.task(default=True)
 def run_server(ctx):
-    ctx.run('./projeto/manage.py runserver --settings=projeto.settings', pty=True)
+    ctx.run('./manage.py runserver 0.0.0.0:8000 --settings=projeto.settings', pty=True)
