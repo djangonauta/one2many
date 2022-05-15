@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
 
   <style>
@@ -15,9 +15,10 @@
   </style>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-6">
+  <div class="container-fluid center">
+    <div class="row mt-3">
+      <div class="col"></div>
+      <div class="col-8">
         {% if messages %}
           {% for message in messages %}
           <div class="alert alert-{{ message.tags }} mt-3">
@@ -29,21 +30,23 @@
         <form action="" method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
           {{ locais_inline_form.management_form }}
           {{ apelidos_inline_form.management_form }}
-          <div class="form-group mt-3">
-            {{ form.nome.label_tag }}
+
+          <div class="mb-3">
+            <label for="{{ projeto_form.nome.id_for_label }}" class="form-label">{{ projeto_form.nome.label }}</label>
             {% render_field projeto_form.nome class="form-control form-control-sm" %}
             <small class="form-text text-danger">
               {{ projeto_form.errors.nome.0 }}
             </small>
           </div>
-          <div class="form-group">
-            {{ form.tags.label_tag }}
+          <div class="mb-3">
+            <label for="{{ projeto_form.tags.id_for_label }}" class="form-label">{{ projeto_form.tags.label }}</label>
             {% render_field projeto_form.tags class="form-control form-control-sm" %}
             <small class="form-text text-danger">
               {{ projeto_form.errors.tags.0 }}
             </small>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
+            <label for="{{ projeto_form.arquivo.id_for_label }}" class="form-label">{{ projeto_form.arquivo.label }}</label>
             {% render_field projeto_form.arquivo class="form-control form-control-sm" %}
             <small class="form-text text-danger">
               {{ projeto_form.errors.arquivo.0 }}
@@ -56,8 +59,8 @@
               <ul class="nav nav-tabs card-header-tabs" id="nav-tab-local" role="tablist">
                 {% for iform in locais_inline_form.forms %}
                 <li class="nav-item">
-                  <a class="nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ forloop.counter0 }}-local"
-                      data-toggle="tab" href="#tab-{{ forloop.counter0 }}-local" role="tab">
+                  <button class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="tab"
+                      data-bs-target="#tab-{{ forloop.counter0 }}-local" type="button">
                     {{ forloop.counter0|add:"1" }}
                     {% if iform.errors %}
                       <i class="fa fa-times-circle text-danger"></i>
@@ -65,7 +68,7 @@
                     {% if not iform.errors and iform.has_changed %}
                       <i class="fa fa-check-circle text-success"></i>
                     {% endif %}
-                  </a>
+                  </button>
                 </li>
                 {% endfor %}
               </ul>
@@ -73,23 +76,23 @@
 
             <div class="card-body tab-content" id="nav-tabContent-local">
               {% for iform in locais_inline_form.forms %}
-                <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}-local" role="tabpanel">
+                <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}-local">
                   {% render_field iform.id %}
-                  <div class="form-group">
+                  <div class="mb-3">
                     {{ iform.nome.label_tag }}
                     {% render_field iform.nome class="form-control form-control-sm" %}
                     <small class="form-text text-danger">
                       {{ iform.errors.nome.0 }}
                     </small>
                   </div>
-                  <div class="form-group">
+                  <div class="mb-3">
                     {{ iform.numero.label_tag }}
                     {% render_field iform.numero class="form-control form-control-sm" %}
                     <small class="form-text text-danger">
                       {{ iform.errors.numero.0 }}
                     </small>
                   </div>
-                  <div class="form-group">
+                  <div class="mb-3">
                     {{ iform.arquivo.label_tag }}
                     {% render_field iform.arquivo class="form-control form-control-sm" %}
                     <small class="form-text text-danger">
@@ -118,8 +121,8 @@
               <ul class="nav nav-tabs card-header-tabs" id="nav-tab-apelido" role="tablist">
                 {% for iform in apelidos_inline_form.forms %}
                 <li class="nav-item">
-                  <a class="nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ forloop.counter0 }}-apelido"
-                      data-toggle="tab" href="#tab-{{ forloop.counter0 }}-apelido" role="tab">
+                  <button class="nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ forloop.counter0 }}-apelido"
+                      data-bs-toggle="tab" data-bs-target="#tab-{{ forloop.counter0 }}-apelido" type="button">
                     {{ forloop.counter0|add:"1" }}
                     {% if iform.errors %}
                       <i class="fa fa-times-circle text-danger"></i>
@@ -127,7 +130,7 @@
                     {% if not iform.errors and iform.has_changed %}
                       <i class="fa fa-check-circle text-success"></i>
                     {% endif %}
-                  </a>
+                </button>
                 </li>
                 {% endfor %}
               </ul>
@@ -135,9 +138,9 @@
 
             <div class="card-body tab-content" id="nav-tabContent-apelido">
               {% for iform in apelidos_inline_form.forms %}
-                <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}-apelido" role="tabpanel">
+                <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}-apelido">
                   {% render_field iform.id %}
-                  <div class="form-group">
+                  <div class="mb-3">
                     {{ iform.nome.label_tag }}
                     {% render_field iform.nome class="form-control form-control-sm" %}
                     <small class="form-text text-danger">
@@ -167,9 +170,10 @@
           </div>
         </form>
 
+        {# template locais #}
         <div id="empty_nav_local" style="display: none">
           <li class="nav-item">
-            <a class="nav-link" id="nav-__prefix__-local" data-toggle="tab" href="#tab-__prefix__-local" role="tab">
+            <a class="nav-link" id="nav-__prefix__-local" data-bs-toggle="tab" data-bs-target="#tab-__prefix__-local" type="button">
               __counter__
             </a>
           </li>
@@ -177,21 +181,21 @@
     
         <div id="empty_tab_form_local" style="display:none">
           <div class="tab-pane fade" id="tab-__prefix__-local">
-            <div class="form-group">
+            <div class="mb-3">
               {{ locais_inline_form.empty_form.nome.label_tag }}
               {% render_field locais_inline_form.empty_form.nome class="form-control form-control-sm" %}
               <small class="form-text text-danger">
                 {{ locais_inline_form.empty_form.errors.nome.0 }}
               </small>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
               {{ locais_inline_form.empty_form.numero.label_tag }}
               {% render_field locais_inline_form.empty_form.numero class="form-control form-control-sm" %}
               <small class="form-text text-danger">
                 {{ locais_inline_form.empty_form.errors.numero.0 }}
               </small>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
               {{ locais_inline_form.empty_form.arquivo.label_tag }}
               {% render_field locais_inline_form.empty_form.arquivo class="form-control form-control-sm" %}
               <small class="form-text text-danger">
@@ -204,10 +208,12 @@
             </div>
           </div>
         </div>
-
+        {# template locais #}
+        
+        {# template apelido #}
         <div id="empty_nav_apelido" style="display: none">
           <li class="nav-item">
-            <a class="nav-link" id="nav-__prefix__-apelido" data-toggle="tab" href="#tab-__prefix__-apelido" role="tab">
+            <a class="nav-link" id="nav-__prefix__-apelido" data-bs-toggle="tab" data-bs-target="#tab-__prefix__-apelido" type="button">
               __counter__
             </a>
           </li>
@@ -215,7 +221,7 @@
 
         <div id="empty_tab_form_apelido" style="display:none">
           <div class="tab-pane fade" id="tab-__prefix__-apelido">
-            <div class="form-group">
+            <div class="mb-3">
               {{ apelidos_inline_form.empty_form.nome.label_tag }}
               {% render_field apelidos_inline_form.empty_form.nome class="form-control form-control-sm" %}
               <small class="form-text text-danger">
@@ -228,6 +234,7 @@
             </div>
           </div>
         </div>
+        {# template apelido #}
 
         <hr/>
         <table class="table table-bordered table-hover table-sm">
@@ -280,13 +287,13 @@
           </tbody>
         </table>
       </div>
+      <div class="col"></div>
     </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <script>
     $(function () {
